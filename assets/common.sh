@@ -17,7 +17,7 @@ artifactory_current_version() {
   local artifacts_url=$1
   local regex=$2
 
-  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.version)' | jq '[.[length-1] | {version: .version}]'
+  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.lastModified)' | jq '[.[length-1] | {version: .version}]'
 
 }
 
@@ -26,7 +26,7 @@ artifactory_versions() {
   local artifacts_url=$1
   local regex=$2
 
-  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.version)' | jq '[.[] | {version: .version}]'
+  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.lastModified)' | jq '[.[] | {version: .version}]'
 
 }
 
@@ -35,7 +35,7 @@ artifactory_files() {
   local artifacts_url=$1
   local regex="(?<uri>$2)"
 
-  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.version)' | jq '[.[] | {uri: .uri, version: .version}]'
+  curl $1 | jq --arg v "$regex" '[.children[].uri | capture($v)]' | jq 'sort_by(.lastModified)' | jq '[.[] | {uri: .uri, version: .version}]'
 
 }
 
